@@ -6,16 +6,23 @@ async function addItem() {
         {
             type: 'input',
             name: 'title',
-            message: 'Digite o titulo da todo',
+            message: 'Digite o titulo da tarefa',
         },
         {
             type: 'input',
             name: 'dueDate',
-            message: 'Digite a data de vencimento do item',
+            message: 'Digite a data de vencimento da tarefa',
         }
     ])
     todoList.push({ title, dueDate, status: 'pending', id: Date.now() });
-    console.log(`\nItem ${title} adicionado\n`);
+    console.log(`\nTarefa "${title}" adicionado\n`);
+}
+
+
+async function listarTarefa() {
+    todoList.forEach(function (tarefa) {
+        console.log(`Titulo: ${tarefa.title} - Data: ${tarefa.dueDate} - Status: ${tarefa.status}`);
+    });
 }
 
 async function main() {
@@ -27,7 +34,8 @@ async function main() {
                 name: 'option',
                 message: 'Escolha uma opção',
                 choices: [
-                    'Adicionar item',
+                    'Adicionar tarefa',
+                    'Listar tarefas',
                     "Sair"
                 ]
             }
@@ -35,8 +43,11 @@ async function main() {
 
 
         switch (option) {
-            case 'Adicionar item':
+            case 'Adicionar tarefa':
                 await addItem();
+                break;
+            case 'Listar tarefas':
+                await listarTarefa();
                 break;
             case 'Sair':
                 return;
