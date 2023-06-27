@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "dependencies": {
+    "inquirer": "^9.2.7"
+  }
+}
