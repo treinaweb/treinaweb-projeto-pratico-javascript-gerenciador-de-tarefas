@@ -1,5 +1,5 @@
 import inquirer from "inquirer";
-const todoList = [];
+let todoList = [];
 
 async function addItem() {
     const { title, dueDate } = await inquirer.prompt([
@@ -87,6 +87,25 @@ async function editarTarefa() {
 
 }
 
+async function deletarTarefa() {
+    if (!todoList.length) {
+        console.log(`\nNenhuma tarefa encontrada\n`)
+        return;
+    }
+
+    const { id } = await inquirer.prompt([
+        {
+            type: 'list',
+            name: 'id',
+            message: 'Qual tarefa você quer deletar?',
+            choices: todoList.map((tarefa) => ({ name: tarefa.title, value: tarefa.id })),
+        }
+    ]);
+
+    todoList = todoList.filter((tarefa) => tarefa.id !== id);
+    console.log(`\nTarefa deletada com sucesso\n`);
+}
+
 async function main() {
     do {
 
@@ -100,6 +119,7 @@ async function main() {
                     'Listar tarefas',
                     'Marcar tarefa como concluído',
                     'Editar tarefa',
+                    'Deletar tarefa',
                     "Sair"
                 ]
             }
@@ -118,6 +138,9 @@ async function main() {
                 break;
             case 'Editar tarefa':
                 await editarTarefa();
+                break;
+            case 'Deletar tarefa':
+                await deletarTarefa();
                 break;
             case 'Sair':
                 return;
