@@ -57,4 +57,9 @@ export class TodoListModel {
     get(id) {
         return this.todoList.find(tarefa => tarefa.id === id);
     }
+
+    update(id, data) {
+        const tarefa = this.get(id);
+        Object.assign(tarefa, data);
+    }
 }
