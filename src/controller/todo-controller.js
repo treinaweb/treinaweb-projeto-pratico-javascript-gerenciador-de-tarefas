@@ -20,4 +20,16 @@ export class TodoListController {
         const todoList = this.todoListModel.getAll();
         this.view.displayItens(todoList);
     }
+
+    async completarTarefa() {
+        const todoList = this.todoListModel.getAll();
+        if (!todoList.length) {
+            this.view.log(`\nNenhuma tarefa encontrada\n`);
+            return;
+        }
+        const id = await this.view.displaySelectItem(todoList);
+        const tarefa = this.todoListModel.get(id);
+        tarefa.status = 'done';
+        this.view.log(`\nTarefa "${tarefa.title}" marcado como concluído.\n`);
+    }
 }

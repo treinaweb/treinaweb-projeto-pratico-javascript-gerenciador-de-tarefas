@@ -53,4 +53,8 @@ export class TodoListModel {
     getAll() {
         return this.todoList;
     }
+
+    get(id) {
+        return this.todoList.find(tarefa => tarefa.id === id);
+    }
 }
