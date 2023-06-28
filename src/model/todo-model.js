@@ -49,4 +49,8 @@ export class TodoListModel {
     add(tarefa) {
         this.todoList.push(tarefa);
     }
+
+    getAll() {
+        return this.todoList;
+    }
 }

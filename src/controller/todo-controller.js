@@ -1,9 +1,8 @@
-import { TodoListModel, TarefaModel } from '../model/todo-model.js';
-import { TodoListView, } from '../view/todo-view.js'
+import { TarefaModel } from '../model/todo-model.js';
+
 
 export class TodoListController {
-    // view = new TodoListView();
-    // todoListModel = new TodoListModel();
+
     constructor(todoListModel, view) {
         this.todoListModel = todoListModel;
         this.view = view;
@@ -15,5 +14,10 @@ export class TodoListController {
         const tarefa = new TarefaModel(title, dueDate);
         this.todoListModel.add(tarefa)
         this.view.log(`\nTarefa "${title}" adicionado\n`);
+    }
+
+    listarTarefa() {
+        const todoList = this.todoListModel.getAll();
+        this.view.displayItens(todoList);
     }
 }

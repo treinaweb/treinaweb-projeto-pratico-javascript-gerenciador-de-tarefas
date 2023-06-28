@@ -15,7 +15,7 @@ async function main() {
                 await controller.addItem();
                 break;
             case 'Listar tarefas':
-                // await listarTarefa();
+                controller.listarTarefa();
                 break;
             case 'Marcar tarefa como concluído':
                 // await completarTarefa();
