@@ -1,5 +1,8 @@
 {
   "type": "module",
+  "scripts": {
+    "dev": "node ./src/main.js"
+  },
   "dependencies": {
     "inquirer": "^9.2.7"
   }
