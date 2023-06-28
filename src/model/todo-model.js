@@ -62,4 +62,8 @@ export class TodoListModel {
         const tarefa = this.get(id);
         Object.assign(tarefa, data);
     }
+
+    delete(id) {
+        this.todoList = this.todoList.filter(tarefa => tarefa.id !== id);
+    }
 }

@@ -24,7 +24,7 @@ async function main() {
                 await controller.editarTarefa();
                 break;
             case 'Deletar tarefa':
-                // await deletarTarefa();
+                await controller.deletarTarefa();
                 break;
             case 'Sair':
                 return;

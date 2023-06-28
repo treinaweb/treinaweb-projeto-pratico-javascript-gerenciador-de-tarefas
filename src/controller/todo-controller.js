@@ -45,4 +45,15 @@ export class TodoListController {
         const { title, dueDate } = await this.view.displayEditItem(tarefa);
         this.todoListModel.update(id, { title, dueDate });
     }
+
+    async deletarTarefa() {
+        const todoList = this.todoListModel.getAll();
+        if (!todoList.length) {
+            this.view.log(`\nNenhuma tarefa encontrada\n`);
+            return;
+        }
+        const id = await this.view.displaySelectItem(todoList);
+        this.todoListModel.delete(id);
+        this.view.log(`\nTarefa deletada com sucesso\n`);
+    }
 }
