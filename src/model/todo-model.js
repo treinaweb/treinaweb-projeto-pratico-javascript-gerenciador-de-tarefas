@@ -4,11 +4,11 @@ export class TarefaModel {
     #status;
     #id;
 
-    constructor(title, dueDate) {
+    constructor(title, dueDate, status, id) {
         this.#title = title;
         this.#dueDate = dueDate;
-        this.#status = 'pending';
-        this.#id = Date.now();
+        this.#status = status;
+        this.#id = id;
     }
 
 
@@ -30,10 +30,6 @@ export class TarefaModel {
 
     get status() {
         return this.#status;
-    }
-
-    set status(value) {
-        this.#status = value;
     }
 
     get id() {
@@ -58,6 +54,10 @@ export class TodoListModel {
         const [dia, mes, ano] = datePTBR.split('/');
         return `${ano}-${mes}-${dia}`;
     }
+    #convertDateISOToPTBR(dateISO) {
+        const [ano, mes, dia] = dateISO.split('-');
+        return `${dia}/${mes}/${ano}`;
+    }
 
     async add(tarefa) {
         tarefa.dueDate = this.#convertDatePTBRToISO(tarefa.dueDate);
@@ -73,12 +73,28 @@ export class TodoListModel {
         }
     }
 
-    getAll() {
-        return this.todoList;
+    async getAll() {
+        const response = await fetch(`${this.#BASE_URL}/todos`);
+        if (!response.ok) {
+            throw '';
+        }
+        const todosList = await response.json();
+        return todosList.map(tarefa => new TarefaModel(
+            tarefa.title,
+            this.#convertDateISOToPTBR(tarefa.dueDate),
+            tarefa.status,
+            tarefa.id,
+        ))
     }
 
-    get(id) {
-        return this.todoList.find(tarefa => tarefa.id === id);
+    async get(id) {
+        const response = await fetch(`${this.#BASE_URL}/todos/${id}`);
+        if (!response.ok) {
+            throw '';
+        }
+        const tarefa = await response.json();
+        return new TarefaModel(tarefa.title, this.#convertDateISOToPTBR(tarefa.dueDate), tarefa.status, tarefa.id);
+
     }
 
     update(id, data) {

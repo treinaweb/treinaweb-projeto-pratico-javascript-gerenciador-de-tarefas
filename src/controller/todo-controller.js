@@ -20,38 +20,43 @@ export class TodoListController {
         }
     }
 
-    listarTarefa() {
-        const todoList = this.todoListModel.getAll();
-        this.view.displayItens(todoList);
+    async listarTarefa() {
+        try {
+
+            const todoList = await this.todoListModel.getAll();
+            this.view.displayItens(todoList);
+        } catch (error) {
+            this.view.log(`\nErro ao buscar tarefas\n`);
+        }
     }
 
     async completarTarefa() {
-        const todoList = this.todoListModel.getAll();
+        const todoList = await this.todoListModel.getAll();
         if (!todoList.length) {
             this.view.log(`\nNenhuma tarefa encontrada\n`);
             return;
         }
         const id = await this.view.displaySelectItem(todoList);
-        const tarefa = this.todoListModel.get(id);
+        const tarefa = await this.todoListModel.get(id);
         tarefa.status = 'done';
         this.view.log(`\nTarefa "${tarefa.title}" marcado como concluído.\n`);
     }
 
 
     async editarTarefa() {
-        const todoList = this.todoListModel.getAll();
+        const todoList = await this.todoListModel.getAll();
         if (!todoList.length) {
             this.view.log(`\nNenhuma tarefa encontrada\n`);
             return;
         }
         const id = await this.view.displaySelectItem(todoList);
-        const tarefa = this.todoListModel.get(id);
+        const tarefa = await this.todoListModel.get(id);
         const { title, dueDate } = await this.view.displayEditItem(tarefa);
         this.todoListModel.update(id, { title, dueDate });
     }
 
     async deletarTarefa() {
-        const todoList = this.todoListModel.getAll();
+        const todoList = await this.todoListModel.getAll();
         if (!todoList.length) {
             this.view.log(`\nNenhuma tarefa encontrada\n`);
             return;
