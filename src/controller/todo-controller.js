@@ -42,7 +42,7 @@ export class TodoListController {
             await this.todoListModel.complete(id);
             this.view.log(`\nTarefa marcado como concluído.\n`);
         } catch (error) {
-            this.view.log(`Erro ao completar tarefa`);
+            this.view.log(`\nErro ao completar tarefa\n`);
         }
     }
 
@@ -61,18 +61,23 @@ export class TodoListController {
             await this.todoListModel.update(id, { title, dueDate });
             this.view.log(`\nTarefa "${title}" editada com sucesso\n`);
         } catch (error) {
-            console.log('\nNão foi possível editar tarefa\n');
+            this.view.log('\nNão foi possível editar tarefa\n');
         }
     }
 
     async deletarTarefa() {
-        const todoList = await this.todoListModel.getAll();
-        if (!todoList.length) {
-            this.view.log(`\nNenhuma tarefa encontrada\n`);
-            return;
+        try {
+            const todoList = await this.todoListModel.getAll();
+            if (!todoList.length) {
+                this.view.log(`\nNenhuma tarefa encontrada\n`);
+                return;
+            }
+            const id = await this.view.displaySelectItem(todoList);
+            await this.todoListModel.delete(id);
+            this.view.log(`\nTarefa deletada com sucesso\n`);
+
+        } catch (error) {
+            this.view.log(`\nErro ao deletar tarefa\n`);
         }
-        const id = await this.view.displaySelectItem(todoList);
-        this.todoListModel.delete(id);
-        this.view.log(`\nTarefa deletada com sucesso\n`);
     }
 }

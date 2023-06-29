@@ -47,7 +47,6 @@ export class TarefaModel {
 
 export class TodoListModel {
     #BASE_URL = 'https://alunos.treinaweb.com.br/tw-todos/api/v1';
-    todoList = [];
     constructor() { }
 
     #convertDatePTBRToISO(datePTBR) {
@@ -111,8 +110,13 @@ export class TodoListModel {
         }
     }
 
-    delete(id) {
-        this.todoList = this.todoList.filter(tarefa => tarefa.id !== id);
+    async delete(id) {
+        const response = await fetch(`${this.#BASE_URL}/todos/${id}`, {
+            method: 'DELETE'
+        });
+        if (!response.ok) {
+            throw '';
+        }
     }
 
 
