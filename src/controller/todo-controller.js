@@ -31,28 +31,38 @@ export class TodoListController {
     }
 
     async completarTarefa() {
-        const todoList = await this.todoListModel.getAll();
-        if (!todoList.length) {
-            this.view.log(`\nNenhuma tarefa encontrada\n`);
-            return;
+        try {
+
+            const todoList = await this.todoListModel.getAll();
+            if (!todoList.length) {
+                this.view.log(`\nNenhuma tarefa encontrada\n`);
+                return;
+            }
+            const id = await this.view.displaySelectItem(todoList);
+            await this.todoListModel.complete(id);
+            this.view.log(`\nTarefa marcado como concluído.\n`);
+        } catch (error) {
+            this.view.log(`Erro ao completar tarefa`);
         }
-        const id = await this.view.displaySelectItem(todoList);
-        const tarefa = await this.todoListModel.get(id);
-        tarefa.status = 'done';
-        this.view.log(`\nTarefa "${tarefa.title}" marcado como concluído.\n`);
     }
 
 
     async editarTarefa() {
-        const todoList = await this.todoListModel.getAll();
-        if (!todoList.length) {
-            this.view.log(`\nNenhuma tarefa encontrada\n`);
-            return;
+        try {
+
+            const todoList = await this.todoListModel.getAll();
+            if (!todoList.length) {
+                this.view.log(`\nNenhuma tarefa encontrada\n`);
+                return;
+            }
+            const id = await this.view.displaySelectItem(todoList);
+            const tarefa = await this.todoListModel.get(id);
+            const { title, dueDate } = await this.view.displayEditItem(tarefa);
+            await this.todoListModel.update(id, { title, dueDate });
+            this.view.log(`\nTarefa "${title}" editada com sucesso\n`);
+        } catch (error) {
+            console.log('\nNão foi possível editar tarefa\n');
         }
-        const id = await this.view.displaySelectItem(todoList);
-        const tarefa = await this.todoListModel.get(id);
-        const { title, dueDate } = await this.view.displayEditItem(tarefa);
-        this.todoListModel.update(id, { title, dueDate });
     }
 
     async deletarTarefa() {

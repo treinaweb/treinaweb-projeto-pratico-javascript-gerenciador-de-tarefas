@@ -97,12 +97,31 @@ export class TodoListModel {
 
     }
 
-    update(id, data) {
-        const tarefa = this.get(id);
-        Object.assign(tarefa, data);
+    async update(id, data) {
+        data.dueDate = this.#convertDatePTBRToISO(data.dueDate);
+        const response = await fetch(`${this.#BASE_URL}/todos/${id}`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify(data),
+        });
+        if (!response.ok) {
+            throw '';
+        }
     }
 
     delete(id) {
         this.todoList = this.todoList.filter(tarefa => tarefa.id !== id);
+    }
+
+
+    async complete(id) {
+        const response = await fetch(`${this.#BASE_URL}/todos/${id}/finish`, {
+            method: 'POST'
+        })
+        if (!response.ok) {
+            throw '';
+        }
     }
 }
