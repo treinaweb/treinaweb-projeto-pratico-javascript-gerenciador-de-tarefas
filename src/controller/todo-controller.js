@@ -11,9 +11,13 @@ export class TodoListController {
 
     async addItem() {
         const { title, dueDate } = await this.view.displayAddItem();
-        const tarefa = new TarefaModel(title, dueDate);
-        this.todoListModel.add(tarefa)
-        this.view.log(`\nTarefa "${title}" adicionado\n`);
+        try {
+            const tarefa = new TarefaModel(title, dueDate);
+            await this.todoListModel.add(tarefa)
+            this.view.log(`\nTarefa "${title}" adicionado\n`);
+        } catch (error) {
+            this.view.log(`\nErro ao adicionar tarefa "${title}"\n`);
+        }
     }
 
     listarTarefa() {

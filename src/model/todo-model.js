@@ -39,15 +39,38 @@ export class TarefaModel {
     get id() {
         return this.#id;
     }
+
+    toJson() {
+        return {
+            title: this.#title,
+            dueDate: this.#dueDate,
+        }
+    }
 }
 
 
 export class TodoListModel {
+    #BASE_URL = 'https://alunos.treinaweb.com.br/tw-todos/api/v1';
     todoList = [];
     constructor() { }
 
-    add(tarefa) {
-        this.todoList.push(tarefa);
+    #convertDatePTBRToISO(datePTBR) {
+        const [dia, mes, ano] = datePTBR.split('/');
+        return `${ano}-${mes}-${dia}`;
+    }
+
+    async add(tarefa) {
+        tarefa.dueDate = this.#convertDatePTBRToISO(tarefa.dueDate);
+        const response = await fetch(`${this.#BASE_URL}/todos`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(tarefa.toJson()),
+        });
+        if (!response.ok) {
+            throw '';
+        }
     }
 
     getAll() {
